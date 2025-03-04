@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  password: Redhat
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: bms_dev
+
+test:
+  <<: *default
+  database: bms_test
+
+production:
+  <<: *default
+  database: bms_prod
+  username: your_production_db_username
+  password: your_production_db_password
+  host: your_production_db_host
