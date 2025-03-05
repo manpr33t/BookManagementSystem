@@ -29,12 +29,12 @@ Request Body:
 
 Json
 {
-	"user": {
-	  "email": "user@example.com",
-	  "password": "password",
-	  "account_number": "123456",
-	  "balance": 100.0
-	 	}
+  "user": {
+    "email": "user@new.com",
+    "password": "password",
+    "account_number": "11223456",
+    "balance": 100.0
+    }
 }
 
 Response:
@@ -42,14 +42,45 @@ Response:
 Json
 {
   "data": {
-    "id": "1",
-    "type": "user",
-    "attributes": {
-      "email": "user@example.com",
-      "account_number": "123456",
-      "balance": 100.0
-    }
+      "id": "4",
+      "type": "user",
+      "attributes": {
+          "id": 4,
+          "email": "user@new.com",
+          "account_number": "11223456",
+          "balance": "100.0"
+      }
   }
+}
+
+Signing in as a User
+URL: POST /users/sign_in
+
+Request Body:
+
+Json
+{
+  "user": {
+    "email": "user@new.com",
+    "password": "password"
+    }
+}
+
+Response:
+
+Json
+{
+    "data": {
+        "id": "4",
+        "type": "user",
+        "attributes": {
+            "id": 4,
+            "email": "user@new.com",
+            "account_number": "11223456",
+            "balance": "100.0"
+        }
+    },
+    "token": "4377ebe944e9ed46b2404aad39f658898d9d93e4"
 }
 
 Borrow a Book
@@ -58,133 +89,212 @@ URL: POST /transactions/borrow
 Request Body:
 
 json
-Copy
+-h Authorization: 4377ebe944e9ed46b2404aad39f658898d9d93e4
 {
-  "user_id": 1,
-  "book_id": 1
+  "user_id": 4,
+  "book_id": 2
 }
 Response:
 
 json
-Copy
 {
   "data": {
-    "id": "1",
-    "type": "transaction",
-    "attributes": {
-      "transaction_type": "borrow",
-      "amount": -5.0,
-      "created_at": "2023-10-01T12:34:56Z"
-    }
+      "id": "40",
+      "type": "transaction",
+      "attributes": {
+          "transaction_type": "borrow",
+          "amount": "-2.0",
+          "created_at": "2025-03-05T17:16:49.136Z"
+      },
+      "relationships": {
+          "user": {
+              "data": {
+                  "id": "4",
+                  "type": "user"
+              }
+          },
+          "book": {
+              "data": {
+                  "id": "2",
+                  "type": "book"
+              }
+          }
+      }
   }
 }
+
 3. Return a Book
 URL: POST /transactions/return
 
 Request Body:
-
+-h Authorization: 4377ebe944e9ed46b2404aad39f658898d9d93e4
 json
-Copy
 {
-  "user_id": 1,
-  "book_id": 1
+  "user_id": 4,
+  "book_id": 2
 }
 Response:
 
 json
-Copy
 {
-  "data": {
-    "id": "1",
-    "type": "transaction",
-    "attributes": {
-      "transaction_type": "return",
-      "amount": 5.0,
-      "created_at": "2023-10-01T12:34:56Z"
+    "message": "Book was returned successfully.",
+    "data": {
+        "id": "50",
+        "type": "transaction",
+        "attributes": {
+            "transaction_type": "borrow",
+            "amount": "-2.0",
+            "created_at": "2025-03-05T22:20:56.195Z"
+        },
+        "relationships": {
+            "user": {
+                "data": {
+                    "id": "4",
+                    "type": "user"
+                }
+            },
+            "book": {
+                "data": {
+                    "id": "2",
+                    "type": "book"
+                }
+            }
+        }
     }
-  }
 }
+
 4. Query User Account Status
 URL: GET /users/:id/account_status
 
 Response:
 
 json
-Copy
 {
-  "data": {
-    "balance": 90.0,
-    "borrowed_books": [
-      {
-        "id": "1",
-        "type": "transaction",
-        "attributes": {
-          "transaction_type": "borrow",
-          "amount": -5.0,
-          "created_at": "2023-10-01T12:34:56Z"
+    "data": {
+        "balance": "96.0",
+        "borrowed_books": {
+            "data": [
+                {
+                    "id": "51",
+                    "type": "transaction",
+                    "attributes": {
+                        "transaction_type": "borrow",
+                        "amount": "-2.0",
+                        "created_at": "2025-03-05T22:22:03.307Z"
+                    },
+                    "relationships": {
+                        "user": {
+                            "data": {
+                                "id": "4",
+                                "type": "user"
+                            }
+                        },
+                        "book": {
+                            "data": {
+                                "id": "2",
+                                "type": "book"
+                            }
+                        }
+                    }
+                }
+            ]
         }
-      }
-    ]
-  }
+    }
 }
+
 5. Query Book Income
-URL: GET /books/:id/income?start_time=2023-01-01&end_time=2023-12-31
+URL: GET /books/:id/income
+
+Request:
+-h Authorization: {token}
+{
+    "user_id": 4,
+    "start_time": "2023-01-01",
+    "end_time": "2025-12-3"
+}
 
 Response:
 
 json
-Copy
 {
-  "data": {
-    "book_id": 1,
-    "total_income": 15.0
-  }
+  "book_id": 2,
+  "total_income": "6.0"
 }
+
+6. Query monthly report
+URL: GET /users/:id/monthly_report
+
+Request:
+-h Authorization: {token}
+
+Response:
+{
+    "data": {
+        "amount_spent": 6.0,
+        "books_borrowed": 3,
+        "unique_books_borrowed": 1
+    }
+}
+
+7. Query annual report
+URL: GET /users/:id/annual_report
+
+Request:
+-h Authorization: {token}
+
+Response:
+{
+    "data": {
+        "amount_spent": 6.0,
+        "books_borrowed": 3,
+        "unique_books_borrowed": 1
+    }
+}
+
+
+
 Setup Instructions
+
 1. Prerequisites
 Ruby 3.x
 
-Rails 7.x
+Rails 8.x
 
-PostgreSQL (or SQLite for development)
+PostgreSQL
 
 2. Clone the Repository
 bash
-Copy
-git clone https://github.com/your-username/book-management-system.git
+git clone https://github.com/manpr33t/book-management-system.git
 cd book-management-system
 3. Install Dependencies
 bash
-Copy
 bundle install
 4. Set Up the Database
 bash
-Copy
 rails db:create
 rails db:migrate
 5. Seed Sample Data
 bash
-Copy
 rails db:seed
 6. Start the Server
 bash
-Copy
 rails server
 Visit http://localhost:3000 to access the API.
 
 Design Ideas
 Models
-User:
 
+User:
 Tracks user details (email, account number, balance).
 
+Has many Books through transactions.
 Has many transactions.
 
 Book:
-
 Tracks book details (title, total copies, available copies).
 
 Has many transactions.
+Has many Users through transactions.
 
 Transaction:
 
@@ -206,56 +316,14 @@ Book borrowing and returning.
 
 Income calculation for books.
 
-Deployment
-Heroku
-Install the Heroku CLI.
-
-Create a Heroku app:
-
-bash
-Copy
-heroku create
-Deploy the app:
-
-bash
-Copy
-git push heroku main
-Run migrations:
-
-bash
-Copy
-heroku run rails db:migrate
-Contributing
-Fork the repository.
-
-Create a new branch:
-
-bash
-Copy
-git checkout -b feature/your-feature
-Commit your changes:
-
-bash
-Copy
-git commit -m "Add your feature"
-Push to the branch:
-
-bash
-Copy
-git push origin feature/your-feature
-Open a pull request.
-
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
 Contact
 For questions or feedback, please contact:
 
-Your Name
+Manpreet Gandhi
 
-Email: your.email@example.com
+Email: manpreet0791@gmail.com
 
-GitHub: your-username
+GitHub: manpr33t
 
 Enjoy using the Book Management System API! 📚🚀
 
