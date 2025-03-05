@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-	before_action :authenticate_user!, only: [:income]
+	before_action :authenticate_user_from_token!, only: [:income]
 	
   def index
     books = Book.all
@@ -12,6 +12,6 @@ class BooksController < ApplicationController
     end_time = params[:end_time]
     transactions = book.transactions.where(created_at: start_time..end_time)
     total_income = transactions.sum(:amount)
-    render json: { book_id: book.id, total_income: total_income }
+    render json: { book_id: book.id, total_income: total_income.abs }
   end
 end

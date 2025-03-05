@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  resources :users, only: [:create] do
+  resources :users, param: :user_id do
     get 'account_status', on: :member
     get 'monthly_report', on: :member
     get 'annual_report', on: :member
@@ -21,4 +21,7 @@ Rails.application.routes.draw do
       post 'return'
     end
   end
+
+  # Catch-all route for undefined routes
+  match '*unmatched', to: 'errors#route_not_found', via: :all
 end
