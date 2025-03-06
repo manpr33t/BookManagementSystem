@@ -15,7 +15,8 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def respond_to_on_destroy
-    # Logout successful
+    token = request.headers['Authorization']&.split(' ')&.last
+    current_user = User.find_by(id: params[:user_id],authentication_token: token)
     if current_user.present?
       current_user.regenerate_authentication_token
       render json: { message: "Logged out successfully" }, status: :ok

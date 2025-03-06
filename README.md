@@ -253,6 +253,14 @@ Response:
     }
 }
 
+Sign Out Request
+URL: DELETE /users/sign_out
+-h Authorizatio: {token}
+
+Response:
+{
+    "message": "Logged out successfully"
+}
 
 Setup Instructions
 
