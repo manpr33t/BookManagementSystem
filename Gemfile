@@ -40,11 +40,12 @@ gem "rack-cors"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", require: "debug/prelude"
+  gem 'rspec-rails', '~> 6.0'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'simplecov', require: false
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
-
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end

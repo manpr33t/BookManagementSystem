@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
-
   private
 
   def authenticate_user_from_token!

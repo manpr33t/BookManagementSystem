@@ -22,7 +22,6 @@ class TransactionsController < ApplicationController
     user = current_user
     book = Book.find(params[:book_id])
     active_transaction = user.transactions.where(book_id: book.id, amount: -book.fee, returned: false).first
-
     if book && active_transaction
       # Update transaction to return
       active_transaction.mark_as_returned
