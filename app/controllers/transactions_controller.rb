@@ -4,8 +4,9 @@ class TransactionsController < ApplicationController
   def borrow
     user = User.find(params[:user_id])
     book = Book.find(params[:book_id])
+    fee_to_be_deducted = user.transactions.active_borrowed.sum(:amount).abs
 
-    if user.balance >= book.fee && book.available_copies > 0
+    if (user.balance - fee_to_be_deducted) >= book.fee && book.available_copies > 0
       transaction = user.transactions.create(
       	book: book,
       	transaction_type: 'borrow',
