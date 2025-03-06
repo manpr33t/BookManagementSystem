@@ -256,10 +256,9 @@ Response:
 Setup Instructions
 
 1. Prerequisites
+
 Ruby 3.x
-
 Rails 8.x
-
 PostgreSQL
 
 2. Clone the Repository
