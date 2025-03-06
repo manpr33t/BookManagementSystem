@@ -22,6 +22,8 @@ Generate monthly and annual reports for a user (number of books borrowed and tot
 
 API Endpoints
 
+Postman Collection: https://www.postman.com/docking-module-specialist-70176277/bms/collection/0z26m91/bookmanagementsystem?share=true
+
 Creating a User
 URL: POST /users
 
