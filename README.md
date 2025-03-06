@@ -89,7 +89,7 @@ URL: POST /transactions/borrow
 Request Body:
 
 json
--h Authorization: 4377ebe944e9ed46b2404aad39f658898d9d93e4
+-h Authorization: {token}
 {
   "user_id": 4,
   "book_id": 2
@@ -123,11 +123,11 @@ json
   }
 }
 
-3. Return a Book
+Return a Book
 URL: POST /transactions/return
 
 Request Body:
--h Authorization: 4377ebe944e9ed46b2404aad39f658898d9d93e4
+-h Authorization: {token}
 json
 {
   "user_id": 4,
@@ -163,8 +163,10 @@ json
     }
 }
 
-4. Query User Account Status
+Query User Account Status
 URL: GET /users/:id/account_status
+Request:
+-h Authorization: {token}
 
 Response:
 
@@ -175,34 +177,34 @@ json
         "borrowed_books": {
             "data": [
                 {
-                    "id": "51",
-                    "type": "transaction",
-                    "attributes": {
-                        "transaction_type": "borrow",
-                        "amount": "-2.0",
-                        "created_at": "2025-03-05T22:22:03.307Z"
-                    },
-                    "relationships": {
-                        "user": {
-                            "data": {
-                                "id": "4",
-                                "type": "user"
-                            }
-                        },
-                        "book": {
-                            "data": {
-                                "id": "2",
-                                "type": "book"
-                            }
-                        }
-                    }
-                }
+                  "id": "51",
+                  "type": "transaction",
+                  "attributes": {
+                      "transaction_type": "borrow",
+                      "amount": "-2.0",
+                      "created_at": "2025-03-05T22:22:03.307Z"
+                  },
+                  "relationships": {
+                      "user": {
+                          "data": {
+                              "id": "4",
+                              "type": "user"
+                          }
+                      },
+                      "book": {
+                          "data": {
+                              "id": "2",
+                              "type": "book"
+                          }
+                      }
+                  }
+              }
             ]
         }
     }
 }
 
-5. Query Book Income
+Query Book Income
 URL: GET /books/:id/income
 
 Request:
@@ -221,7 +223,7 @@ json
   "total_income": "6.0"
 }
 
-6. Query monthly report
+Query monthly report
 URL: GET /users/:id/monthly_report
 
 Request:
@@ -236,7 +238,7 @@ Response:
     }
 }
 
-7. Query annual report
+Query annual report
 URL: GET /users/:id/annual_report
 
 Request:
@@ -250,7 +252,6 @@ Response:
         "unique_books_borrowed": 1
     }
 }
-
 
 
 Setup Instructions
@@ -309,11 +310,13 @@ Uses RSpec and factory_bot for unit and request tests.
 
 Test coverage includes:
 
+![image](https://github.com/user-attachments/assets/0b8c7f25-7e6c-40cf-83c5-7b33da75d6d5)
+
 User creation and account status.
-
 Book borrowing and returning.
-
 Income calculation for books.
+Annual Report.
+Monthly Report
 
 Contact
 For questions or feedback, please contact:
